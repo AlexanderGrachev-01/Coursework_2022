@@ -1,17 +1,17 @@
 import requests
 import datetime
 from config import tg_bot_token, open_weather_token, code_to_smile
-from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher
-from aiogram.utils import executor
+from aiogram import Bot, types, executor, Dispatcher
+import markups as nav
+
 
 bot = Bot(token=tg_bot_token)
 dp = Dispatcher(bot)
 
-
 @dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
-    await message.reply("Hey! Write me the name of the city and I'll send you a weather report!")
+    await bot.send_message(message.from_user.id,'Hey! Write me the name of the city and I\'ll send you a weather report!'.format(message.from_user),
+                           reply_markup = nav.mainMenu)
 
 @dp.message_handler()
 async def get_weather(message: types.Message):
