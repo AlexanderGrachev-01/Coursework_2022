@@ -1,6 +1,6 @@
 import requests
 import datetime
-from config import tg_bot_token, open_weather_token
+from config import tg_bot_token, open_weather_token, code_to_smile
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
@@ -22,7 +22,7 @@ async def get_weather(message: types.Message):
         data = r.json()
 
         city = data["name"]
-        curWeather = data["main"]["temp"]
+        curTemp = data["main"]["temp"]
         humidity = data["main"]["humidity"]
         pressure = data["main"]["pressure"]
         windSpeed = data["wind"]["speed"]
@@ -30,10 +30,15 @@ async def get_weather(message: types.Message):
         sunsetTime = datetime.datetime.fromtimestamp(data["sys"]["sunset"])
         lenthOfTheDay = sunsetTime - sunriseTime
 
+        weatherDisc = data["weather"][0]["main"]
+        if weatherDisc in code_to_smile:
+            wd = code_to_smile[weatherDisc]
+
         await message.reply(
-              f"Weather in: {city}\n"
-              f"on: {datetime.datetime.now().strftime('%Y.%m.%d  %H:%M')}\n\n"
-              f"Temperature: {curWeather}°C\n"
+              #f"Now in:"
+              f"{city}\n"
+              #f"on: {datetime.datetime.now().strftime('%Y.%m.%d  %H:%M')}\n\n"
+              f"{curTemp}°C {wd}\n\n"
               f"Humidity: {humidity}%\nPressure: {pressure} mmHg\n"
               f"Wind: {windSpeed} m\s\nSunrise: {sunriseTime}\n"
               f"Sunset: {sunsetTime}\nDaylight hours: {lenthOfTheDay}\n\n"
