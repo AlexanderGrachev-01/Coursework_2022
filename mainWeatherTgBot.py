@@ -8,16 +8,10 @@ import markups as nav
 bot = Bot(token=tg_bot_token)
 dp = Dispatcher(bot)
 
-@dp.message_handler(commands=["start"])
-async def start_command(message: types.Message):
-    await bot.send_message(message.from_user.id,'Hey! Write me the name of the city and I\'ll send you a weather report!'.format(message.from_user),
-                           reply_markup = nav.mainMenu)
-
-@dp.message_handler()
-async def get_weather(message: types.Message):
+def getTodayDayWeather(city):
     try:
         r = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?q={message.text}&appid={open_weather_token}&units=metric"
+            f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={open_weather_token}&units=metric"
         )
         data = r.json()
 
@@ -34,18 +28,33 @@ async def get_weather(message: types.Message):
         if weatherDisc in code_to_smile:
             wd = code_to_smile[weatherDisc]
 
-        await message.reply(
+        return (
               #f"Now in:"
               f"{city}\n"
               #f"on: {datetime.datetime.now().strftime('%Y.%m.%d  %H:%M')}\n\n"
               f"{curTemp}°C {wd}\n\n"
-              f"Humidity: {humidity}%\nPressure: {pressure} mmHg\n"
-              f"Wind: {windSpeed} m\s\nSunrise: {sunriseTime}\n"
-              f"Sunset: {sunsetTime}\nDaylight hours: {lenthOfTheDay}\n\n"
+              f"\U0001F4A7 Humidity: {humidity}%\n\U0001F321 Pressure: {pressure} mmHg\n"
+              f"\U0001F32C Wind: {windSpeed} m\s\n\U0001F304 Sunrise: {sunriseTime.strftime('%H:%M')}\n"
+              f"\U0001F307 Sunset: {sunsetTime.strftime('%H:%M')}\n\U0000231B Daylight hours: {lenthOfTheDay}\n\n"
               f"***Have a nice day!***")
 
     except:
-        await message.reply("\U00002620 Check the name of the city \U00002620 ")
+        return ("\U00002620 Check the name of the city \U00002620 ")
+
+
+
+@dp.message_handler(commands=["start"])
+async def start_command(message: types.Message):
+    await bot.send_message(message.from_user.id,'Hey! Write me the name of the city and I\'ll send you a weather report!'.format(message.from_user),
+                           reply_markup = nav.mainMenu)
+
+#@dp.message_handler(commands=["now"])
+#async def get_weather(message: types.Message):
+#    await bot.send_message(message.from_user.id, getTodayDayWeather(message.text))
+
+@dp.message_handler()
+async def get_weather(message: types.Message):
+    await bot.send_message(message.from_user.id, getTodayDayWeather(message.text))
 
 
 

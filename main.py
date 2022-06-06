@@ -5,9 +5,10 @@ from config import open_weather_token, code_to_smile
 def getWeather(city, get_weather_token):
     try:
         r = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={get_weather_token}&units=metric"
+            f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={open_weather_token}"
         )
         data = r.json()
+        print(data)
 
         city = data["name"]
         curTemp = data["main"]["temp"]
