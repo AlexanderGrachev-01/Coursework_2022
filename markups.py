@@ -3,12 +3,11 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 mainMenuButton = KeyboardButton("Main menu")
 
 # --- Main menu ---
-nowButton = KeyboardButton("Now")
 todayButton =KeyboardButton("Today")
 tomorrowButton = KeyboardButton("Tomorrow")
 fiveDaysButton = KeyboardButton("5 days")
 settingsButton = KeyboardButton("Settings")
-mainMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(nowButton, todayButton,
+mainMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(todayButton,
                                                          tomorrowButton, fiveDaysButton,
                                                          settingsButton)
 
