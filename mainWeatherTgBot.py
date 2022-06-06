@@ -8,7 +8,7 @@ import markups as nav
 bot = Bot(token=tg_bot_token)
 dp = Dispatcher(bot)
 
-def getTodayDayWeather(city):
+def getNowDayWeather(city):
     try:
         r = requests.get(
             f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={open_weather_token}&units=metric"
@@ -29,9 +29,7 @@ def getTodayDayWeather(city):
             wd = code_to_smile[weatherDisc]
 
         return (
-              #f"Now in:"
               f"{city}\n"
-              #f"on: {datetime.datetime.now().strftime('%Y.%m.%d  %H:%M')}\n\n"
               f"{curTemp}°C {wd}\n\n"
               f"\U0001F4A7 Humidity: {humidity}%\n\U0001F321 Pressure: {pressure} mmHg\n"
               f"\U0001F32C Wind: {windSpeed} m\s\n\U0001F304 Sunrise: {sunriseTime.strftime('%H:%M')}\n"
@@ -46,7 +44,7 @@ def getTodayDayWeather(city):
 @dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,'Hey! Write me the name of the city and I\'ll send you a weather report!'.format(message.from_user),
-                           reply_markup = nav.mainMenu)
+                           reply_markup=nav.mainMenu)
 
 #@dp.message_handler(commands=["now"])
 #async def get_weather(message: types.Message):
@@ -54,7 +52,7 @@ async def start_command(message: types.Message):
 
 @dp.message_handler()
 async def get_weather(message: types.Message):
-    await bot.send_message(message.from_user.id, getTodayDayWeather(message.text))
+    await bot.send_message(message.from_user.id, getNowDayWeather(message.text))
 
 
 
