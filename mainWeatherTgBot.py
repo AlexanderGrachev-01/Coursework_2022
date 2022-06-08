@@ -1,3 +1,4 @@
+from aiogram.dispatcher.filters import state
 from weatherData import getNowWeather, getDayWeather, getTomorrowWeather, getFiveDayWeather
 from config import tg_bot_token
 from aiogram import Bot, types, executor, Dispatcher

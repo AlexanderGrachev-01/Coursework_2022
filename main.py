@@ -1,5 +1,6 @@
 import requests
 import datetime
+import pprint
 from config import open_weather_token, code_to_smile
 
 def getWeather(city):
@@ -150,18 +151,57 @@ def test_weather(city):
         for i in data['list']:
             maxTemp.append(i['main']['temp_max'])
             minTemp.append(i['main']['temp_min'])
-            weatherDisc.append(i['weather'][0]['description'])
+            weatherDisc.append(i['weather'][0]['main'])
 
         print(maxTemp[0], maxTemp[1], maxTemp[2], maxTemp[3], maxTemp[4])
         print(minTemp[0], minTemp[1], minTemp[2], minTemp[3], minTemp[4])
         print(weatherDisc[0], weatherDisc[1], weatherDisc[2], weatherDisc[3], weatherDisc[4])
+
+        for el in weatherDisc:
+            if el in code_to_smile:
+                wd.append(code_to_smile[el])
+
+        for el in wd:
+            print(el)
+
+    except:
+        print ("\U00002620 Check the name of the city \U00002620 ")
+
+def test_tomorrow(city):
+    try:
+        r = requests.get(
+            f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={open_weather_token}&units=metric"
+        )
+        data = r.json()
+        pprint.pprint(data)
+
+        date = datetime.datetime.today() + datetime.timedelta(days=1)
+        curTemp = '{0:+3.0f}'.format(data["list"][1]["main"]["temp"])
+        feelsTemp = '{0:+3.0f}'.format(data["list"][1]["main"]["feels_like"])
+        maxTemp = '{0:+3.0f}'.format(data["list"][1]["main"]["temp_max"])
+        minTemp = '{0:+3.0f}'.format(data["list"][1]["main"]["temp_min"])
+        windSpeed = data["list"][1]["wind"]["speed"]
+
+        weatherDisc = data["list"][1]["weather"][0]["main"]
+        if weatherDisc in code_to_smile:
+            wd = (code_to_smile[weatherDisc])
+
+        print(
+            f"*Tomorrow*\n"
+            f"({date})\n\n"
+            f"{city}\n{curTemp}°C  {wd}\n"
+            f"Feels like: {feelsTemp}\n\n"
+            f"**Min / Max**\n"
+            f"{minTemp} / {maxTemp}\n\n"
+            f"\U0001F32C Wind: {windSpeed} m\s\n"
+            f"***Have a nice day!***")
 
     except:
         print ("\U00002620 Check the name of the city \U00002620 ")
 
 def main():
     city = input("Enter the city: ")
-    test_weather(city)
+    test_tomorrow(city)
 
 
 if __name__ == '__main__':
