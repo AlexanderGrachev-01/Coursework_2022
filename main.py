@@ -126,9 +126,42 @@ def getFiveDayWeather(city):
         print("Check the name of the city")
 
 
+def test_weather(city):
+    try:
+        r = requests.get(
+            f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={open_weather_token}&units=metric"
+        )
+        data = r.json()
+        print(data)
+
+        date = []
+        maxTemp = []
+        minTemp = []
+        weatherDisc = []
+        wd = []
+
+
+
+        for i in data['list']:
+            print(i['dt_txt'], '{0:+3.0f}'.format(i['main']['temp']), i['weather'][0]['description'])
+
+
+
+        for i in data['list']:
+            maxTemp.append(i['main']['temp_max'])
+            minTemp.append(i['main']['temp_min'])
+            weatherDisc.append(i['weather'][0]['description'])
+
+        print(maxTemp[0], maxTemp[1], maxTemp[2], maxTemp[3], maxTemp[4])
+        print(minTemp[0], minTemp[1], minTemp[2], minTemp[3], minTemp[4])
+        print(weatherDisc[0], weatherDisc[1], weatherDisc[2], weatherDisc[3], weatherDisc[4])
+
+    except:
+        print ("\U00002620 Check the name of the city \U00002620 ")
+
 def main():
     city = input("Enter the city: ")
-    getDayWeather(city)
+    test_weather(city)
 
 
 if __name__ == '__main__':
