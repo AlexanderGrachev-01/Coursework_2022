@@ -1,9 +1,8 @@
-from weatherData import getNowWeather, getDayWeather, getTommorowWeather, getFiveDayWeather
+from weatherData import getNowWeather, getDayWeather, getTomorrowWeather, getFiveDayWeather
 from config import tg_bot_token
 from aiogram import Bot, types, executor, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.dispatcher.filters import Command
 import markups as nav
 from states import botStates
 
@@ -24,7 +23,7 @@ async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,'Write me the name of the city and I\'ll send you a weather report for today!'.format(message.from_user))
     await botStates.STATE_TODAY.set()
 
-@dp.message_handler(commands=["tommorow"])
+@dp.message_handler(commands=["tomorrow"])
 async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,'Write me the name of the city and I\'ll send you a weather report for tomorrow!'.format(message.from_user))
     await botStates.STATE_TOMORROW.set()
@@ -43,24 +42,21 @@ async def start_command(message: types.Message):
 
 # *** States ***
 
-@dp.message_handler(state=botStates.STATE_NOW)
+@dp.message_handler()
 async def get_weather(message: types.Message):
     await bot.send_message(message.from_user.id, getNowWeather(message.text))
 
 @dp.message_handler(state=botStates.STATE_TODAY)
 async def get_weather(message: types.Message):
     await bot.send_message(message.from_user.id, getDayWeather(message.text))
-    await botStates.STATE_NOW.set()
 
 @dp.message_handler(state=botStates.STATE_TOMORROW)
 async def get_weather(message: types.Message):
-    await bot.send_message(message.from_user.id, getTommorowWeather(message.text))
-    await botStates.STATE_NOW.set()
+    await bot.send_message(message.from_user.id, getTomorrowWeather(message.text))
 
 @dp.message_handler(state=botStates.STATE_FIVE_DAYS)
 async def get_weather(message: types.Message):
     await bot.send_message(message.from_user.id, getFiveDayWeather(message.text))
-    await botStates.STATE_NOW.set()
 
 @dp.message_handler(state=botStates.STATE_SETTINGS)
 async def get_weather(message: types.Message):
