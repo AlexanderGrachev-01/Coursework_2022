@@ -59,12 +59,12 @@ def getDayWeather(city):  # Weather for Today
             wd = code_to_smile[weatherDisc]
 
         return (
-            f"*Today*\n"
+            f"***Today***\n"
             f"({datetime.datetime.now().strftime('%Y-%m-%d')})\n\n"
-            f"{city}\n{curTemp}°C  {wd}\n"
+            f"**{city}**\n{curTemp}°C  {wd}\n"
             f"Feels like: {feelsTemp}\n\n"
             f"**Min / Max**\n"
-            f"{minTemp} / {maxTemp}\n\n"
+            f"\U0001F53B{minTemp} / {maxTemp}\U0001F53A\n\n"
             f"\U0001F4A7 Humidity: {humidity}%\n\U0001F321 Pressure: {pressure} mmHg\n"
             f"\U0001F32C Wind: {windSpeed} m\s\n\U0001F304 Sunrise: {sunriseTime.strftime('%H:%M')}\n"
             f"\U0001F307 Sunset: {sunsetTime.strftime('%H:%M')}\n\U0000231B Daylight hours: {lenthOfTheDay}\n\n"
@@ -94,12 +94,12 @@ def getTomorrowWeather(city):  # Weather for Tomorrow
                 wd = (code_to_smile[weatherDisc])
 
             return (
-                f"*Tomorrow*\n"
+                f"***Tomorrow***\n"
                 f"({date.strftime('%Y-%m-%d')})\n\n"
-                f"{city}\n{curTemp}°C  {wd}\n"
-                f"Feels like: {feelsTemp}\n\n"
+                f"**{city}**\n{curTemp}°C  {wd}\n"
+                f"Feels like: {feelsTemp}\n"
                 f"**Min / Max**\n"
-                f"{minTemp} / {maxTemp}\n\n"
+                f"\U0001F53B{minTemp} / {maxTemp}\U0001F53A\n\n"
                 f"\U0001F32C Wind: {windSpeed} m\s\n\n"
                 f"***Have a nice day!***")
 
@@ -135,7 +135,7 @@ def getFiveDayWeather(city):  # Weather for 5 days
 
 
         return (
-            f"{city}\n\n"
+            f"**{city}**\n\n"
             f"Today {wd[0]}\n"
             f"{minTemp[0]}°C / {maxTemp[0]}°C\n\n"
             f"Tomorrow {wd[1]}\n"
