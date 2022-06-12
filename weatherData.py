@@ -2,15 +2,25 @@ import requests
 import datetime
 from config import open_weather_token, code_to_smile
 
-
-def getNowWeather(city):  # Weather at the moment
-    try:
-        print(city)
+def getData(city, td):
+    print(city)
+    if td == True:
         r = requests.get(
             f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={open_weather_token}&units=metric"
         )
-        data = r.json()
-        print(data)
+    else:
+        r = requests.get(
+            f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={open_weather_token}&units=metric"
+        )
+    data = r.json()
+    print(data)
+    return data
+
+
+
+def getNowWeather(city):  # Weather at the moment
+    try:
+        data = getData(city, True)
 
         city = data["name"]
         curTemp = '{0:+3.0f}'.format(data["main"]["temp"])
@@ -36,17 +46,11 @@ def getNowWeather(city):  # Weather at the moment
 
 def getDayWeather(city):  # Weather for Today
     try:
-        r = requests.get(
-            f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={open_weather_token}&units=metric"
-        )
-        data = r.json()
-        print(data)
+        data = getData(city, True)
 
         city = data["name"]
         curTemp = '{0:+3.0f}'.format(data["main"]["temp"])
         feelsTemp = '{0:+3.0f}'.format(data["main"]["feels_like"])
-        maxTemp = '{0:+3.0f}'.format(data["main"]["temp_max"])
-        minTemp = '{0:+3.0f}'.format(data["main"]["temp_min"])
         humidity = data["main"]["humidity"]
         pressure = data["main"]["pressure"]
         windSpeed = data["wind"]["speed"]
@@ -57,6 +61,10 @@ def getDayWeather(city):  # Weather for Today
         weatherDisc = data["weather"][0]["main"]
         if weatherDisc in code_to_smile:
             wd = code_to_smile[weatherDisc]
+
+        data = getData(city, False)
+        maxTemp = '{0:+3.0f}'.format(data["list"][0]["main"]["temp_max"])
+        minTemp = '{0:+3.0f}'.format(data["list"][0]["main"]["temp_min"])
 
         return (
             f"***Today***\n"
@@ -76,11 +84,7 @@ def getDayWeather(city):  # Weather for Today
 
 def getTomorrowWeather(city):  # Weather for Tomorrow
         try:
-            r = requests.get(
-                f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={open_weather_token}&units=metric"
-            )
-            data = r.json()
-            print(data)
+            data = getData(city, False)
 
             date = datetime.datetime.today() + datetime.timedelta(days=1)
             curTemp = '{0:+3.0f}'.format(data["list"][1]["main"]["temp"])
@@ -109,11 +113,7 @@ def getTomorrowWeather(city):  # Weather for Tomorrow
 
 def getFiveDayWeather(city):  # Weather for 5 days
     try:
-        r = requests.get(
-            f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={open_weather_token}&units=metric"
-        )
-        data = r.json()
-        print(data)
+        data = getData(city, False)
 
         date = [datetime.datetime.today() +datetime.timedelta(days=2),
                 datetime.datetime.today() +datetime.timedelta(days=3),

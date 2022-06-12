@@ -18,5 +18,5 @@ notificationTimeButton = KeyboardButton("Notification time")
 notificationCityButton = KeyboardButton("Change city")
 
 settingsMenu = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-settingsMenu.add(notificationOnOfButton, notificationTimeButton, notificationCityButton, mainMenuButton)
+settingsMenu.add(mainMenuButton)
 
