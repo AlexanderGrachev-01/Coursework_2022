@@ -19,31 +19,31 @@ async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,
                            'Hey! \U0001F609\nWrite me the name of the city and I\'ll send you a weather report! \U0001F326\n\n'
                            'You can also ask me for a detailed forecast for today or '
-                           'tomorrow or find out the forecast for 5 days, just use the buttons on your keyboard'.format(message.from_user),
+                           'tomorrow or find out the forecast for 5 days, just use the buttons on your keyboard',
                            reply_markup=nav.mainMenu)
 
 @dp.message_handler(commands=["today"])
 async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,
-                           'Write me the name of the city and I\'ll send you a weather report for today!'.format(message.from_user))
+                           'Write me the name of the city and I\'ll send you a weather report for today!')
     await botStates.STATE_TODAY.set()
 
 @dp.message_handler(commands=["tomorrow"])
 async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,
-                           'Write me the name of the city and I\'ll send you a weather report for tomorrow!'.format(message.from_user))
+                           'Write me the name of the city and I\'ll send you a weather report for tomorrow!')
     await botStates.STATE_TOMORROW.set()
 
 @dp.message_handler(commands=["five_days"])
 async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,
-                           'Write me the name of the city and I\'ll send you a weather report for five days!'.format(message.from_user))
+                           'Write me the name of the city and I\'ll send you a weather report for five days!')
     await botStates.STATE_FIVE_DAYS.set()
 
 @dp.message_handler(commands=["settings"])
 async def start_command(message: types.Message):
     await bot.send_message(message.from_user.id,
-                           'It\'s a settings bar!'.format(message.from_user),
+                           'It\'s a settings bar!',
                            reply_markup=nav.settingsMenu)
     await botStates.STATE_SETTINGS.set()
 
@@ -72,9 +72,78 @@ async def get_weather(message: types.Message):
     await dp.current_state().finish()
 
 @dp.message_handler(state=botStates.STATE_SETTINGS)
-async def get_weather(message: types.Message):
-    await bot.send_message(message.from_user.id, 'Settings will be soon...', reply_markup=nav.mainMenu)
-    await dp.current_state().finish()
+async def settings(message: types.Message):
+    if message.text == 'On/off Notification':
+        await bot.send_message(message.from_user.id,
+                               'Do you want to receive notifications? \U0001F514',
+                               reply_markup=nav.notificationOnOffMenu)
+        await botStates.STATE_ON_OFF.set()
+    else:
+        if message.text == 'Notification_time':
+            await bot.send_message(message.from_user.id,
+                                   'When do you want to receive notifications? \U000023F0',
+                                   reply_markup=nav.backMenu)
+            await botStates.STATE_TIME.set()
+        else:
+            if message.text == 'Notification_city':
+                await bot.send_message(message.from_user.id,
+                                       'Which city do you want to receive notifications from? \U0001F3D9',
+                                       reply_markup=nav.backMenu)
+                await botStates.STATE_CITY.set()
+            else:
+                if message.text == 'Menu':
+                    await bot.send_message(message.from_user.id,
+                                           'Write me the name of the city and I\'ll send you a weather report! \U0001F326',
+                                           reply_markup=nav.mainMenu)
+                    await dp.current_state().finish()
+
+
+@dp.message_handler(state=botStates.STATE_ON_OFF)
+async def on_off_notification(message: types.Message):
+    if message.text == 'Turn on':
+        await bot.send_message(message.from_user.id,
+                               'Notifications turn on \U0001F514',
+                               reply_markup=nav.notificationOnOffMenu)
+    else:
+        if message.text == 'Turn off':
+            await bot.send_message(message.from_user.id,
+                                   'Notification turn off \U0001F515',
+                                   reply_markup=nav.notificationOnOffMenu)
+        else:
+            if message.text == 'Back':
+                await bot.send_message(message.from_user.id,
+                                       'It\'s a settings bar!'.format(message.from_user),
+                                       reply_markup=nav.settingsMenu)
+                await botStates.STATE_SETTINGS.set()
+
+
+@dp.message_handler(state=botStates.STATE_TIME)
+async def notification_time(message: types.Message):
+    if message.text == 'Back':
+        await bot.send_message(message.from_user.id,
+                               'It\'s a settings bar!'.format(message.from_user),
+                               reply_markup=nav.settingsMenu)
+        await botStates.STATE_SETTINGS.set()
+    else:
+        await bot.send_message(message.from_user.id,
+                               f'Notification time changed to {message.text}',
+                               reply_markup=nav.settingsMenu)
+        await botStates.STATE_SETTINGS.set()
+
+
+@dp.message_handler(state=botStates.STATE_CITY)
+async def notification_city(message: types.Message):
+    if message.text == 'Back':
+        await bot.send_message(message.from_user.id,
+                               'It\'s a settings bar!'.format(message.from_user),
+                               reply_markup=nav.settingsMenu)
+        await botStates.STATE_SETTINGS.set()
+    else:
+        await bot.send_message(message.from_user.id,
+                               f'Notification city changed to "{message.text}"',
+                               reply_markup=nav.settingsMenu)
+        await botStates.STATE_SETTINGS.set()
+
 
 
 if __name__ == '__main__':

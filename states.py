@@ -7,3 +7,6 @@ class botStates(StatesGroup):
     STATE_TOMORROW = State()
     STATE_FIVE_DAYS = State()
     STATE_SETTINGS = State()
+    STATE_ON_OFF = State()
+    STATE_TIME = State()
+    STATE_CITY = State()
