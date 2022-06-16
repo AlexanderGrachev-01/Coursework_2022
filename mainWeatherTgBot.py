@@ -82,7 +82,7 @@ async def settings(message: types.Message):
         if message.text == 'Notification_time':
             await bot.send_message(message.from_user.id,
                                    'When do you want to receive notifications? \U000023F0',
-                                   reply_markup=nav.backMenu)
+                                   reply_markup=nav.notificationTimeMenu)
             await botStates.STATE_TIME.set()
         else:
             if message.text == 'Notification_city':
@@ -102,12 +102,12 @@ async def settings(message: types.Message):
 async def on_off_notification(message: types.Message):
     if message.text == 'Turn on':
         await bot.send_message(message.from_user.id,
-                               'Notifications turn on \U0001F514',
+                               'Notifications on \U0001F514',
                                reply_markup=nav.notificationOnOffMenu)
     else:
         if message.text == 'Turn off':
             await bot.send_message(message.from_user.id,
-                                   'Notification turn off \U0001F515',
+                                   'Notification off \U0001F515',
                                    reply_markup=nav.notificationOnOffMenu)
         else:
             if message.text == 'Back':

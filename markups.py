@@ -31,6 +31,16 @@ notificationOffButton = KeyboardButton("Turn off")
 notificationOnOffMenu = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 notificationOnOffMenu.add(notificationOnButton, notificationOffButton).add(backButton)
 
+# --- Notification time  ---
+morningTimeButton = KeyboardButton("8:00")
+middayTimeButton = KeyboardButton("12:00")
+eveningTimeButton = KeyboardButton("18:00")
+
+notificationTimeMenu = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+notificationTimeMenu.add(morningTimeButton, middayTimeButton, eveningTimeButton).add(backButton)
+
+
+
 
 
 
